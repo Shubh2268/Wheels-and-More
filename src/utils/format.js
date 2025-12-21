@@ -1,34 +1,59 @@
-// Format price as ₹1,499 or ₹999
-export const formatPrice = (value) => {
-  if (!value) return "₹0";
-  return "₹" + Number(value).toLocaleString("en-IN");
+// ---------------- PRICE ----------------
+
+// Format price as ₹1,499 or ₹12,999
+export const formatPrice = (value = 0) => {
+  const number = Number(value);
+  if (Number.isNaN(number)) return "₹0";
+  return `₹${number.toLocaleString("en-IN")}`;
 };
 
-// Create a readable product title (Capitalized Words)
+// ---------------- TEXT ----------------
+
+// Capitalize each word (for titles, names)
 export const formatTitle = (text = "") => {
+  if (!text) return "";
   return text
     .toLowerCase()
     .split(" ")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 };
 
-// Trim long descriptions
+// Trim long text safely (cards, previews)
 export const shortText = (text = "", limit = 80) => {
-  if (text.length <= limit) return text;
-  return text.slice(0, limit) + "...";
+  if (!text) return "";
+  return text.length > limit ? `${text.slice(0, limit)}…` : text;
 };
 
-// Generate random clean ID for products
-export const makeId = () => {
-  return "prod_" + Math.random().toString(36).substr(2, 9);
+// ---------------- PRODUCT UTILS ----------------
+
+// Generate clean unique product ID
+export const makeId = (prefix = "prod") => {
+  return `${prefix}_${crypto.randomUUID().slice(0, 8)}`;
 };
 
-// Convert title into slug for cleaner URLs
+// Create SEO-friendly URL slug
 export const slugify = (text = "") => {
+  if (!text) return "";
   return text
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-");
 };
+
+// ---------------- UI HELPERS ----------------
+
+// Stock badge helper
+export const getStockStatus = (availability = "") => {
+  return availability.toLowerCase() === "in stock"
+    ? { label: "In Stock", color: "text-green-600" }
+    : { label: "Out of Stock", color: "text-red-500" };
+};
+
+// Sort helpers (for future use)
+export const sortByPriceLowToHigh = (products = []) =>
+  [...products].sort((a, b) => a.price - b.price);
+
+export const sortByPriceHighToLow = (products = []) =>
+  [...products].sort((a, b) => b.price - a.price);

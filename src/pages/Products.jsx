@@ -31,16 +31,34 @@ export default function Products() {
   const filteredProducts = products.filter(filterLogic);
 
   return (
-    <div className="flex">
-      <FilterSidebar filters={filters} setFilters={setFilters} />
-
-      <div className="flex-1">
-        <h1 className="text-xl font-semibold p-4 border-b">
-          All Toy Cars ({filteredProducts.length})
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* PAGE HEADER */}
+      <div className="mb-8 border-b border-white/10 pb-6">
+        <p className="text-xs tracking-[0.3em] uppercase text-gray-400">
+          Curated Collection
+        </p>
+        <h1 className="mt-3 text-2xl sm:text-3xl font-medium text-white">
+          All Cars
         </h1>
-
-        <ProductGrid products={filteredProducts} />
+        <p className="mt-2 text-sm text-gray-400">
+          {filteredProducts.length} models available
+        </p>
       </div>
-    </div>
+
+      {/* MAIN LAYOUT */}
+      <div className="flex flex-col lg:flex-row gap-10">
+        {/* FILTER SIDEBAR */}
+        <aside className="lg:w-72 shrink-0">
+          <div className="sticky top-24">
+            <FilterSidebar filters={filters} setFilters={setFilters} />
+          </div>
+        </aside>
+
+        {/* PRODUCTS GRID */}
+        <div className="flex-1">
+          <ProductGrid products={filteredProducts} />
+        </div>
+      </div>
+    </section>
   );
 }
