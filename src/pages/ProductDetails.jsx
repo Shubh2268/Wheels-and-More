@@ -9,7 +9,6 @@ export default function ProductDetails() {
   const { addToCart } = useCart();
 
   const product = products.find((p) => p.id === id);
-  const stock = product ? getStockStatus(product.availability) : null;
 
   if (!product) {
     return (
@@ -25,23 +24,31 @@ export default function ProductDetails() {
     );
   }
 
+  const stock = getStockStatus(product.availability);
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-16">
-      {/* Breadcrumb */}
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      {/* BACK */}
       <Link
         to="/products"
-        className="text-xs tracking-wide text-gray-500 mb-10 inline-block"
+        className="text-xs tracking-widest uppercase text-gray-400 hover:text-black transition"
       >
         ← Back to Products
       </Link>
 
-      <div className="grid md:grid-cols-2 gap-14">
+      <div className="mt-10 grid md:grid-cols-2 gap-14 items-start">
         {/* IMAGE */}
-        <div className=" from-gray-50 to-gray-100 rounded-3xl p-10">
+        <div className="from-gray-50 to-gray-100 rounded-3xl p-10 relative">
+          {product.availability === "Out of Stock" && (
+            <span className="absolute top-6 left-6 text-xs bg-black text-white px-4 py-1 rounded-full tracking-widest">
+              SOLD OUT
+            </span>
+          )}
+
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-[420px] object-contain"
+            className="w-full h-[420px] object-contain transition-transform duration-500 hover:scale-105"
           />
         </div>
 
@@ -56,7 +63,7 @@ export default function ProductDetails() {
           </h1>
 
           {product.description && (
-            <p className="mt-6 text-gray-600 leading-relaxed">
+            <p className="mt-6 text-gray-600 leading-relaxed max-w-lg">
               {product.description}
             </p>
           )}
@@ -67,7 +74,7 @@ export default function ProductDetails() {
           </div>
 
           {/* META */}
-          <div className="mt-6 flex gap-6 text-sm">
+          <div className="mt-6 flex gap-4 text-sm">
             <span className="px-4 py-1 rounded-full bg-gray-100">
               Scale: {product.scale}
             </span>
@@ -79,11 +86,11 @@ export default function ProductDetails() {
             </span>
           </div>
 
-          {/* ACTION */}
+          {/* CTA */}
           <button
             onClick={() => addToCart(product)}
             disabled={product.availability !== "In Stock"}
-            className="mt-10 bg-black text-white px-10 py-3 rounded-full
+            className="mt-10 bg-black text-white px-10 py-4 rounded-full text-sm tracking-wide
                        hover:bg-gray-900 transition
                        disabled:opacity-40 disabled:cursor-not-allowed"
           >
@@ -91,6 +98,6 @@ export default function ProductDetails() {
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
